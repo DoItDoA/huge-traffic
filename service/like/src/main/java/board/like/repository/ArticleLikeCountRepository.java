@@ -13,20 +13,20 @@ import java.util.Optional;
 
 @Repository
 public interface ArticleLikeCountRepository extends JpaRepository<ArticleLikeCount, Long> {
-    // select ... for update
+    // SELECT ... for update
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ArticleLikeCount> findLockedByArticleId(Long articleId);
 
 
     @Query(
-            value = "update article_like_count set like_count = like_count + 1 where article_id = :articleId",
+            value = "update article_like_count set like_count = like_count + 1 WHERE article_id = :articleId",
             nativeQuery = true
     )
     @Modifying
     int increase(@Param("articleId") Long articleId);
 
     @Query(
-            value = "update article_like_count set like_count = like_count - 1 where article_id = :articleId",
+            value = "update article_like_count set like_count = like_count - 1 WHERE article_id = :articleId",
             nativeQuery = true
     )
     @Modifying

@@ -31,7 +31,7 @@ public class CommentServiceV2 {
 
     @Transactional
     public CommentResponse create(CommentCreateRequestV2 request) {
-        CommentV2 parent = findParent(request);
+        CommentV2 parent = findParent(request); // DB에 삭제되지 않은 부모 Path가 있는지 확인
         CommentPath parentCommentPath = parent == null ? CommentPath.create("") : parent.getCommentPath();
         CommentV2 comment = commentRepository.save(
                 CommentV2.create(

@@ -22,7 +22,7 @@ public class CommentV2 {
     private String content;
     private Long articleId; // shard key
     private Long writerId;
-    @Embedded
+    @Embedded // 사용함으로써 컬럼명은 CommentPath 안의 변수가 컬럼대상이 된다
     private CommentPath commentPath;
     private Boolean deleted;
     private LocalDateTime createdAt;

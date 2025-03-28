@@ -9,39 +9,39 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(
-            value = "select article.article_id, article.title, article.content, article.board_id, article.writer_id, article.created_at, article.modified_at " +
-                    "from (" +
-                    "   select article_id from article " +
-                    "   where board_id = :boardId " +
-                    "   order by article_id desc " +
-                    "   limit :limit offset :offset " +
-                    ") t left join article on t.article_id = article.article_id ",
+            value = "SELECT article.article_id, article.title, article.content, article.board_id, article.writer_id, article.created_at, article.modified_at " +
+                    "FROM (" +
+                    "   SELECT article_id FROM article " +
+                    "   WHERE board_id = :boardId " +
+                    "   ORDER BY article_id DESC " +
+                    "   LIMIT :limit OFFSET :offset " +
+                    ") t LEFT JOIN article ON t.article_id = article.article_id ",
             nativeQuery = true
     )
     List<Article> findAll(@Param("boardId") Long boardId, @Param("offset") Long offset, @Param("limit") Long limit);
 
-    @Query(value = "select count(*) from (" +
-            "   select article_id from article where board_id = :boardId limit :limit" +
+    @Query(value = "SELECT count(*) FROM (" +
+            "   SELECT article_id FROM article WHERE board_id = :boardId LIMIT :limit" +
             ") t",
             nativeQuery = true)
     Long count(@Param("boardId") Long boardId, @Param("limit") Long limit);
 
     @Query(
-            value = "select article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
+            value = "SELECT article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
                     "article.created_at, article.modified_at " +
-                    "from article " +
-                    "where board_id = :boardId " +
-                    "order by article_id desc limit :limit",
+                    "FROM article " +
+                    "WHERE board_id = :boardId " +
+                    "ORDER BY article_id DESC LIMIT :limit",
             nativeQuery = true
     )
     List<Article> findAllInfiniteScroll(@Param("boardId") Long boardId, @Param("limit") Long limit);
 
     @Query(
-            value = "select article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
+            value = "SELECT article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
                     "article.created_at, article.modified_at " +
-                    "from article " +
-                    "where board_id = :boardId and article_id < :lastArticleId " +
-                    "order by article_id desc limit :limit",
+                    "FROM article " +
+                    "WHERE board_id = :boardId AND article_id < :lastArticleId " +
+                    "ORDER BY article_id DESC LIMIT :limit",
             nativeQuery = true
     )
     List<Article> findAllInfiniteScroll(@Param("boardId") Long boardId,

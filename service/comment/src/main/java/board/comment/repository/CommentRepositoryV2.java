@@ -11,13 +11,15 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
-    @Query("select c from CommentV2 c where c.commentPath.path = :path")
+    @Query("SELECT c FROM CommentV2 c WHERE c.commentPath.path = :path")
     Optional<CommentV2> findByPath(@Param("path") String path);
 
     @Query(
-            value = "select path from comment_v2 " +
-                    "where article_id = :articleId and path > :pathPrefix and path like :pathPrefix% " +
-                    "order by path desc limit 1",
+            value = "SELECT path FROM comment_v2 " +
+                    "WHERE article_id = :articleId " +
+                    "AND path > :pathPrefix " + // 본인은 미포함 검색 조건
+                    "AND path LIKE :pathPrefix% " + // parentPath를 prefix로 하는 모든 자손 검색 조건
+                    "ORDER BY path DESC LIMIT 1",
             nativeQuery = true
     )
     Optional<String> findDescendantsTopPath(
@@ -26,13 +28,13 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
     );
 
     @Query(
-            value = "select comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
+            value = "SELECT comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
                     "comment_v2.writer_id, comment_v2.deleted, comment_v2.created_at " +
-                    "from (" +
-                    "   select comment_id from comment_v2 where article_id = :articleId " +
-                    "   order by path asc " +
-                    "   limit :limit offset :offset " +
-                    ") t left join comment_v2 on t.comment_id = comment_v2.comment_id",
+                    "FROM (" +
+                    "   SELECT comment_id FROM comment_v2 WHERE article_id = :articleId " +
+                    "   ORDER BY path ASC " +
+                    "   LIMIT :limit OFFSET :offset " +
+                    ") t LEFT JOIN comment_v2 ON t.comment_id = comment_v2.comment_id",
             nativeQuery = true
     )
     List<CommentV2> findAll(
@@ -42,8 +44,8 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
     );
 
     @Query(
-            value = "select count(*) from (" +
-                    "   select comment_id from comment_v2 where article_id = :articleId limit :limit " +
+            value = "SELECT count(*) FROM (" +
+                    "   SELECT comment_id FROM comment_v2 WHERE article_id = :articleId LIMIT :limit " +
                     ") t",
             nativeQuery = true
     )
@@ -53,12 +55,12 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
     );
 
     @Query(
-            value = "select comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
+            value = "SELECT comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
                     "comment_v2.writer_id, comment_v2.deleted, comment_v2.created_at " +
-                    "from comment_v2 " +
-                    "where article_id = :articleId " +
-                    "order by path asc " +
-                    "limit :limit",
+                    "FROM comment_v2 " +
+                    "WHERE article_id = :articleId " +
+                    "ORDER BY path ASC " +
+                    "LIMIT :limit",
             nativeQuery = true
     )
     List<CommentV2> findAllInfiniteScroll(
@@ -68,12 +70,12 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
 
 
     @Query(
-            value = "select comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
+            value = "SELECT comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
                     "comment_v2.writer_id, comment_v2.deleted, comment_v2.created_at " +
-                    "from comment_v2 " +
-                    "where article_id = :articleId and path > :lastPath " +
-                    "order by path asc " +
-                    "limit :limit",
+                    "FROM comment_v2 " +
+                    "WHERE article_id = :articleId AND path > :lastPath " +
+                    "ORDER BY path ASC " +
+                    "LIMIT :limit",
             nativeQuery = true
     )
     List<CommentV2> findAllInfiniteScroll(

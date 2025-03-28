@@ -19,6 +19,7 @@ public class CommentApiV2Test {
         CommentResponse response1 = create(new CommentCreateRequestV2(1L, "my comment1", null, 1L));
         CommentResponse response2 = create(new CommentCreateRequestV2(1L, "my comment2", response1.getPath(), 1L));
         CommentResponse response3 = create(new CommentCreateRequestV2(1L, "my comment3", response2.getPath(), 1L));
+        CommentResponse response22 = create(new CommentCreateRequestV2(1L, "my comment22", response1.getPath(), 1L));
 
         System.out.println("response1.getPath() = " + response1.getPath());
         System.out.println("response1.getCommentId() = " + response1.getCommentId());

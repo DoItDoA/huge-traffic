@@ -75,9 +75,9 @@ public class CommentService {
         commentRepository.delete(comment); // 삭제
         if (!comment.isRoot()) { // 최상위 댓글이 아닌 경우
             commentRepository.findById(comment.getParentCommentId()) // 부모 댓글 조회하여
-                    .filter(Comment::getDeleted) // 최
-                    .filter(not(this::hasChildren))
-                    .ifPresent(this::delete);
+                    .filter(Comment::getDeleted) // 부모 댓글이 삭제된 표시이어야며
+                    .filter(not(this::hasChildren)) // 자식은 가지고 있지 않아야한다.
+                    .ifPresent(this::delete); // 삭제
         }
     }
 

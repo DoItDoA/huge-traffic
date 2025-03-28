@@ -90,7 +90,7 @@ public class ArticleLikeService {
     }
 
     /**
-     * select ... for update + update
+     * SELECT ... for update + update
      */
     @Transactional
     public void likePessimisticLock2(Long articleId, Long userId) {

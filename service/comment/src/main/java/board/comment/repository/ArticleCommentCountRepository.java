@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleCommentCountRepository extends JpaRepository<ArticleCommentCount, Long> {
     @Query(
-            value = "update article_comment_count set comment_count = comment_count + 1 where article_id = :articleId",
+            value = "update article_comment_count set comment_count = comment_count + 1 WHERE article_id = :articleId",
             nativeQuery = true
     )
     @Modifying
     int increase(@Param("articleId") Long articleId);
 
     @Query(
-            value = "update article_comment_count set comment_count = comment_count - 1 where article_id = :articleId",
+            value = "update article_comment_count set comment_count = comment_count - 1 WHERE article_id = :articleId",
             nativeQuery = true
     )
     @Modifying
