@@ -12,7 +12,7 @@ public interface BoardArticleCountRepository extends JpaRepository<BoardArticleC
     @Query(
             value = "update board_article_count set article_count = article_count + 1 WHERE board_id = :boardId",
             nativeQuery = true
-    )
+    ) // 비관적 락 1
     @Modifying
     int increase(@Param("boardId") Long boardId);
 

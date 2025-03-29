@@ -91,7 +91,7 @@ public class CommentServiceV2 {
         commentRepository.findById(commentId)
                 .filter(not(CommentV2::getDeleted))
                 .ifPresent(comment -> {
-                    if(hasChildren(comment)) {
+                    if (hasChildren(comment)) {
                         comment.delete();
                     } else {
                         delete(comment);
@@ -113,11 +113,9 @@ public class CommentServiceV2 {
                 });
     }
 
-    private boolean hasChildren(CommentV2 comment) {
-        return commentRepository.findDescendantsTopPath(
-                comment.getArticleId(),
-                comment.getCommentPath().getPath()
-        ).isPresent();
+    private boolean hasChildren(CommentV2 c) {
+        return commentRepository.findDescendantsTopPath(c.getArticleId(), c.getCommentPath().getPath())
+                .isPresent();
     }
 
     private void delete(CommentV2 comment) {

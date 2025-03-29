@@ -102,7 +102,7 @@ public class ArticleLikeService {
                 )
         );
         ArticleLikeCount articleLikeCount = articleLikeCountRepository.findLockedByArticleId(articleId)
-                .orElseGet(() -> ArticleLikeCount.init(articleId, 0L));
+                .orElseGet(() -> ArticleLikeCount.init(articleId, 0L)); // 데이터가 없을 시 0으로 초기화
         articleLikeCount.increase();
         articleLikeCountRepository.save(articleLikeCount);
     }
@@ -130,7 +130,8 @@ public class ArticleLikeService {
         ArticleLikeCount articleLikeCount = articleLikeCountRepository.findById(articleId)
                 .orElseGet(() -> ArticleLikeCount.init(articleId, 0L));
         articleLikeCount.increase();
-        articleLikeCountRepository.save(articleLikeCount);
+        // 트랜잭션이 끝날 때 엔터티의 @Version이 붙은 컬럼에 의해서 자동으로 버전 확인하고 다를 시 OptimisticLockException 발생시켜 롤백시킴
+        articleLikeCountRepository.save(articleLikeCount); // ArticleLikeCount.init(articleId, 0L) 때문에 넣음
     }
 
     @Transactional
