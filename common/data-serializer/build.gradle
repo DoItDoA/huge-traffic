@@ -1,4 +1,4 @@
 dependencies {
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind' // 자바 객체와 JSON 사이의 변환을 담당
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310' // 시간 관련 클래스를 JSON 변환 도움
 }

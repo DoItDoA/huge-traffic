@@ -25,12 +25,12 @@ public class HotArticleListRepository {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public void add(Long articleId, LocalDateTime time, Long score, Long limit, Duration ttl) {
-        //redis에 한번만 통신하면서 여러번 연산
+        // 여러 개의 명령어를 한 번에 실행하여 성능 향상(배치 처리)
         redisTemplate.executePipelined((RedisCallback<?>) action -> {
             StringRedisConnection conn = (StringRedisConnection) action;
             String key = generateKey(time);
             conn.zAdd(key, score, String.valueOf(articleId));
-            conn.zRemRange(key, 0, - limit - 1);
+            conn.zRemRange(key, 0, -limit - 1); // 상위 0~ limit 개 유지, 벗어나면 나머지는 삭제
             conn.expire(key, ttl.toSeconds());
             return null;
         });
@@ -50,10 +50,11 @@ public class HotArticleListRepository {
 
     public List<Long> readAll(String dateStr) {
         return redisTemplate.opsForZSet()
-                .reverseRangeWithScores(generateKey(dateStr), 0, -1).stream()
+                .reverseRangeWithScores(generateKey(dateStr), 0, -1) // 내림차순 정렬된 데이터 조회 , Set<TypedTuple<V>> 반환(밸류와 스코어 보유)
+                .stream()
                 .peek(tuple ->
-                        log.info("[HotArticleListRepository.readAll] articleId={}, score={}", tuple.getValue(), tuple.getScore()))
-                .map(ZSetOperations.TypedTuple::getValue)
+                        log.info("[HotArticleListRepository.readAll] articleId={}, score={}", tuple.getValue(), tuple.getScore())) // 각 데이터 로그 출력, peek는 중간 변형 없이 로그 출력등 활용
+                .map(ZSetOperations.TypedTuple::getValue) // 게시글 id 만 추출, ZSetOperations.TypedTuple은 value와 score를 가지고 있는 객체
                 .map(Long::valueOf)
                 .toList();
     }

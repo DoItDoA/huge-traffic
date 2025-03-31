@@ -26,6 +26,10 @@ public class ArticleViewCountBackUpProcessor {
                     .ifPresentOrElse(ignored -> { },
                         () -> articleViewCountBackUpRepository.save(ArticleViewCount.init(articleId, viewCount))
                     );
+            // optional.ifPresentOrElse(
+            //    value -> { /* 값이 존재할 때 실행할 코드 */ },
+            //    () -> { /* 값이 없을 때 실행할 코드 */ }
+            //);
         }
 
         outboxEventPublisher.publish(

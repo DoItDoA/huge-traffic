@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HotArticleController {
     private final HotArticleService hotArticleService;
-
+    // 인기글 목록 조회
     @GetMapping("/v1/hot-articles/articles/date/{dateStr}")
     public List<HotArticleResponse> readAll(@PathVariable("dateStr") String dateStr) {
         return hotArticleService.readAll(dateStr);

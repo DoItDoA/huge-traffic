@@ -7,12 +7,12 @@ spring:
       host: 127.0.0.1
       port: 6379
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9092 # 브로커 주소, 여러 개일 경우 ,로 구분
     consumer:
-      group-id: board-hot-article-service
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      enable-auto-commit: false
+      group-id: board-hot-article-service # 컨슈머 그룹 id
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # 키를 문자열 형식으로 역직렬화
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer # 밸류를 문자열 형식으로 역직렬화
+      enable-auto-commit: false # 오프셋 자동 커밋 여부 (false 추천)
 endpoints:
   board-article-service:
     url: http://127.0.0.1:9000

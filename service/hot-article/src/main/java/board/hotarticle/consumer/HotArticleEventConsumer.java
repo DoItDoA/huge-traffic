@@ -21,7 +21,7 @@ public class HotArticleEventConsumer {
             EventType.Topic.BOARD_COMMENT,
             EventType.Topic.BOARD_LIKE,
             EventType.Topic.BOARD_VIEW
-    })
+    }) // 토픽 구독
     public void listen(String message, Acknowledgment ack) {
         log.info("[HotArticleEventConsumer.listen] received message={}", message);
         Event<EventPayload> event = Event.fromJson(message);

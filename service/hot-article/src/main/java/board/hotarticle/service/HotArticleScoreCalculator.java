@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor // 인기글 점수 계산
 public class HotArticleScoreCalculator {
     private final ArticleLikeCountRepository articleLikeCountRepository;
     private final ArticleViewCountRepository articleViewCountRepository;

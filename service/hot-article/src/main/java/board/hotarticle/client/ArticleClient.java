@@ -24,7 +24,8 @@ public class ArticleClient {
         restClient = RestClient.create(articleServiceUrl);
     }
 
-    public ArticleResponse read(Long articleId) {
+    // 게시글 서비스로 게시글 원본 정보 호출
+   public ArticleResponse read(Long articleId) {
         try {
             return restClient.get()
                     .uri("/v1/articles/{articleId}", articleId)

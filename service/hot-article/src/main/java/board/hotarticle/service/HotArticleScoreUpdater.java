@@ -13,14 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor // 인기글 점수 업데이트
 public class HotArticleScoreUpdater {
     private final HotArticleListRepository hotArticleListRepository;
     private final HotArticleScoreCalculator hotArticleScoreCalculator;
     private final ArticleCreatedTimeRepository articleCreatedTimeRepository;
 
     private static final long HOT_ARTICLE_COUNT = 10;
-    private static final Duration HOT_ARTICLE_TTL = Duration.ofDays(10);
+    private static final Duration HOT_ARTICLE_TTL = Duration.ofDays(10); // 넉넉하게 10일로 설정
 
     public void update(Event<EventPayload> event, EventHandler<EventPayload> eventHandler) {
         Long articleId = eventHandler.findArticleId(event);
@@ -30,7 +30,7 @@ public class HotArticleScoreUpdater {
             return;
         }
 
-        eventHandler.handle(event);
+        eventHandler.handle(event); // 이 함수를 통해 좋아요
 
         long score = hotArticleScoreCalculator.calculate(articleId);
         hotArticleListRepository.add(
@@ -41,7 +41,7 @@ public class HotArticleScoreUpdater {
                 HOT_ARTICLE_TTL
         );
     }
-
+    // 오늘 날짜인지 확인
     private boolean isArticleCreatedToday(LocalDateTime createdTime) {
         return createdTime != null && createdTime.toLocalDate().equals(LocalDate.now());
     }
