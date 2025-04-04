@@ -1,0 +1,2 @@
+각자의 모듈 (게시글, 댓글, 좋아요, 조회수, 인기글, 게시글 최적화)에는 스프링 빈을 보관하는 applicationContext가 존재
+각자의 applicationContext에 MessageRelayConfig을 등록시켜 각자 사용하도록 만듦

@@ -22,8 +22,8 @@ public class ArticleIdListRepository {
         redisTemplate.executePipelined((RedisCallback<?>) action -> {
             StringRedisConnection conn = (StringRedisConnection) action;
             String key = generateKey(boardId);
-            conn.zAdd(key, 0, toPaddedString(articleId)); // long을 double로 만들면 일부 유실되어 스코어값을 동일하게하고 value 값을 통해 오름차순
-            conn.zRemRange(key, 0, - limit - 1);
+            conn.zAdd(key, 0, toPaddedString(articleId)); // long을 double로 만들면 일부 유실되어 스코어 값을 동일하게 하고 value 값을 통해 오름차순
+            conn.zRemRange(key, 0, -limit - 1);
             return null;
         });
     }
@@ -32,12 +32,14 @@ public class ArticleIdListRepository {
         redisTemplate.opsForZSet().remove(generateKey(boardId), toPaddedString(articleId));
     }
 
+    // 페이지네이션
     public List<Long> readAll(Long boardId, Long offset, Long limit) {
         return redisTemplate.opsForZSet()
                 .reverseRange(generateKey(boardId), offset, offset + limit - 1)
                 .stream().map(Long::valueOf).toList();
     }
 
+    // 무한 스크롤롤
     public List<Long> readAllInfiniteScroll(Long boardId, Long lastArticleId, Long limit) {
         return redisTemplate.opsForZSet().reverseRangeByLex(
                 generateKey(boardId),

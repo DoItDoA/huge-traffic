@@ -15,7 +15,7 @@ public class DataInitializer {
 
     @Test
     void initialize() {
-        for(int i=0; i<30; i++) {
+        for (int i = 0; i < 30; i++) {
             Long articleId = createArticle();
             System.out.println("articleId = " + articleId);
             long commentCount = RandomGenerator.getDefault().nextLong(10);
@@ -52,7 +52,7 @@ public class DataInitializer {
     }
 
     void createComment(Long articleId, long commentCount) {
-        while(commentCount-- > 0) {
+        while (commentCount-- > 0) {
             commentServiceClient.post()
                     .uri("/v2/comments")
                     .body(new CommentCreateRequest(articleId, "content", 1L))
@@ -69,7 +69,7 @@ public class DataInitializer {
     }
 
     void like(Long articleId, long likeCount) {
-        while(likeCount-- > 0) {
+        while (likeCount-- > 0) {
             likeServiceClient.post()
                     .uri("/v1/article-likes/articles/{articleId}/users/{userId}/pessimistic-lock-1", articleId, likeCount)
                     .retrieve();
@@ -77,7 +77,7 @@ public class DataInitializer {
     }
 
     void view(Long articleId, long viewCount) {
-        while(viewCount-- > 0) {
+        while (viewCount-- > 0) {
             viewServiceClient.post()
                     .uri("/v1/article-views/articles/{articleId}/users/{userId}", articleId, viewCount)
                     .retrieve();

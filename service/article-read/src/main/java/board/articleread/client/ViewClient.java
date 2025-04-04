@@ -23,7 +23,7 @@ public class ViewClient {
     }
 
 //    @Cacheable(key = "#articleId", value = "articleViewCount")
-    @OptimizedCacheable(type = "articleViewCount", ttlSeconds = 1)
+    @OptimizedCacheable(type = "articleViewCount", ttlSeconds = 1) // 조회수 ttl은 트래픽이 많은 낮에 5~10초 정도하고, 트래픽 낮은 밤에 30~60 정도로 동적으로 설정하면 좋다
     public long count(Long articleId) {
         log.info("[ViewClient.count] articleId={}", articleId);
         try {

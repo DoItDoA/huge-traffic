@@ -25,7 +25,7 @@ public class ArticleCreatedEventHandler implements EventHandler<ArticleCreatedEv
         articleQueryModelRepository.create(
                 ArticleQueryModel.create(payload),
                 Duration.ofDays(1)
-        );
+        ); // 게시글 조회용
         articleIdListRepository.add(payload.getBoardId(), payload.getArticleId(), 1000L);
         boardArticleCountRepository.createOrUpdate(payload.getBoardId(), payload.getBoardArticleCount());
     }

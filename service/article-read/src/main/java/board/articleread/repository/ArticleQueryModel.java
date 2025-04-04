@@ -18,6 +18,7 @@ public class ArticleQueryModel {
     private Long articleCommentCount;
     private Long articleLikeCount;
 
+    // 최초로 생성되는 경우
     public static ArticleQueryModel create(ArticleCreatedEventPayload payload) {
         ArticleQueryModel articleQueryModel = new ArticleQueryModel();
         articleQueryModel.articleId = payload.getArticleId();
@@ -32,6 +33,7 @@ public class ArticleQueryModel {
         return articleQueryModel;
     }
 
+    // client를 통해 데이터를 가져오는 경우
     public static ArticleQueryModel create(ArticleClient.ArticleResponse article, Long commentCount, Long likeCount) {
         ArticleQueryModel articleQueryModel = new ArticleQueryModel();
         articleQueryModel.articleId = article.getArticleId();
@@ -46,7 +48,8 @@ public class ArticleQueryModel {
         return articleQueryModel;
     }
 
-    public void updateBy(CommentCreatedEventPayload payload) {
+   // 아래는 이벤트가 발생했을 경우
+   public void updateBy(CommentCreatedEventPayload payload) {
         this.articleCommentCount = payload.getArticleCommentCount();
     }
 

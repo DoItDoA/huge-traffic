@@ -22,6 +22,6 @@ public class OutboxEventPublisher {
                 Event.of(eventIdSnowflake.nextId(), type, payload).toJson(),
                 shardKey % MessageRelayConstants.SHARD_COUNT
         );
-        applicationEventPublisher.publishEvent(OutboxEvent.of(outbox));
+        applicationEventPublisher.publishEvent(OutboxEvent.of(outbox)); // @TransactionalEventListener 에서 읽어들임
     }
 }

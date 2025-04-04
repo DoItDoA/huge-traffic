@@ -46,13 +46,13 @@ public class ArticleReadService {
     }
 
     public ArticleReadResponse read(Long articleId) {
-        ArticleQueryModel articleQueryModel = articleQueryModelRepository.read(articleId)
-                .or(() -> this.fetch(articleId))
+        ArticleQueryModel articleQueryModel = articleQueryModelRepository.read(articleId) // redis 호출
+                .or(() -> this.fetch(articleId)) // .read 값이 없을 경우 fetch로 대체값 생성. db값 호출
                 .orElseThrow();
 
         return ArticleReadResponse.from(
                 articleQueryModel,
-                viewClient.count(articleId)
+                viewClient.count(articleId) // 조회수는 매번 자주 변동되기 때문에 Query Redis에 같이 넣으면 불필요한 캐시 갱신이 증가하므로 따로 관리
         );
     }
 

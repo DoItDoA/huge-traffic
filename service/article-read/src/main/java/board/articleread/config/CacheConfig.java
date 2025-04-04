@@ -11,15 +11,13 @@ import java.time.Duration;
 import java.util.Map;
 
 @Configuration
-@EnableCaching
+@EnableCaching // @Cacheable 사용 가능
 public class CacheConfig {
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) { // RedisConnectionFactory 레디스와 연결하는 객체
         return RedisCacheManager.builder(connectionFactory)
                 .withInitialCacheConfigurations(
-                        Map.of(
-                                "articleViewCount", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(1))
-                        )
+                        Map.of("articleViewCount", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(1))) // @Cacheable로 articleViewCount는 1초 동안만 캐시로 사용 설정
                 )
                 .build();
     }
