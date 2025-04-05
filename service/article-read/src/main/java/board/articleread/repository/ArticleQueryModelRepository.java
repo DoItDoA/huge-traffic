@@ -54,6 +54,6 @@ public class ArticleQueryModelRepository {
         return redisTemplate.opsForValue().multiGet(keyList).stream()
                 .filter(Objects::nonNull)
                 .map(json -> DataSerializer.deserialize(json, ArticleQueryModel.class))
-                .collect(toMap(ArticleQueryModel::getArticleId, identity()));
+                .collect(toMap(ArticleQueryModel::getArticleId, identity())); // identity()는 객체 그대로 가리킴
     }
 }

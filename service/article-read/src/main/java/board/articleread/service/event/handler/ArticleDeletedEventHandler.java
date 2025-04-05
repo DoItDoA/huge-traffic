@@ -20,6 +20,8 @@ public class ArticleDeletedEventHandler implements EventHandler<ArticleDeletedEv
     public void handle(Event<ArticleDeletedEventPayload> event) {
         ArticleDeletedEventPayload payload = event.getPayload();
         articleIdListRepository.delete(payload.getBoardId(), payload.getArticleId());
+
+        // 게시글 삭제해도 순간적으로 목록을 볼 수 있기 때문에 목록을 먼저 삭제
         articleQueryModelRepository.delete(payload.getArticleId());
         boardArticleCountRepository.createOrUpdate(payload.getBoardId(), payload.getBoardArticleCount());
     }

@@ -35,18 +35,20 @@ public class ArticleIdListRepository {
     // 페이지네이션
     public List<Long> readAll(Long boardId, Long offset, Long limit) {
         return redisTemplate.opsForZSet()
-                .reverseRange(generateKey(boardId), offset, offset + limit - 1)
+                .reverseRange(generateKey(boardId), offset, offset + limit - 1) // score 내림차순
                 .stream().map(Long::valueOf).toList();
     }
 
-    // 무한 스크롤롤
+    // 무한 스크롤
     public List<Long> readAllInfiniteScroll(Long boardId, Long lastArticleId, Long limit) {
-        return redisTemplate.opsForZSet().reverseRangeByLex(
+        return redisTemplate.opsForZSet().reverseRangeByLex( // value값 기준으로 내림차순
                 generateKey(boardId),
-                lastArticleId == null ?
-                        Range.unbounded() :
-                        Range.leftUnbounded(Range.Bound.exclusive(toPaddedString(lastArticleId))),
-                Limit.limit().count(limit.intValue())
+                lastArticleId == null ? // 범위 구하기
+                        Range.unbounded() : // 전부다 가져오기
+                        Range.leftUnbounded( // 괄호 안의 값 기준으로 작은 것을 가져옴
+                                Range.Bound.exclusive(toPaddedString(lastArticleId)) // exclusive를 통해 해당값은 포함안하고 작은값 가져오기
+                        ),
+                Limit.limit().count(limit.intValue()) // 출력 개수 제한
         ).stream().map(Long::valueOf).toList();
     }
 

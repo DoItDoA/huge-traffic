@@ -81,6 +81,7 @@ public class ArticleReadService {
     private List<ArticleReadResponse> readAll(List<Long> articleIds) {
         Map<Long, ArticleQueryModel> articleQueryModelMap = articleQueryModelRepository.readAll(articleIds);
         return articleIds.stream()
+                // Redis를 통해 값을 가져오지만 혹시나 누락된게 있을지도 모르니 한번 더 검토하여 없으면 통신하여 가져옴
                 .map(articleId -> articleQueryModelMap.containsKey(articleId) ?
                         articleQueryModelMap.get(articleId) :
                         fetch(articleId).orElse(null))
@@ -95,10 +96,13 @@ public class ArticleReadService {
 
     private List<Long> readAllArticleIds(Long boardId, Long page, Long pageSize) {
         List<Long> articleIds = articleIdListRepository.readAll(boardId, (page - 1) * pageSize, pageSize);
+        // redis 값 존재할 시 출력
         if (pageSize == articleIds.size()) {
             log.info("[ArticleReadService.readAllArticleIds] return redis data.");
             return articleIds;
         }
+
+        // 없으면 통신을 통해 값 가져오기
         log.info("[ArticleReadService.readAllArticleIds] return origin data.");
         return articleClient.readAll(boardId, page, pageSize).getArticles().stream()
                 .map(ArticleClient.ArticleResponse::getArticleId)
@@ -127,7 +131,7 @@ public class ArticleReadService {
             log.info("[ArticleReadService.readAllInfiniteScrollArticleIds] return redis data.");
             return articleIds;
         }
-        log.info("[ArticleReadService.readAllInfiniteScrollArticleIds] return origin data.");
+        // 게시글 아이디가 없을 시 통신하여 가져옴옴        log.info("[ArticleReadService.readAllInfiniteScrollArticleIds] return origin data.");
         return articleClient.readAllInfiniteScroll(boardId, lastArticleId, pageSize).stream()
                 .map(ArticleClient.ArticleResponse::getArticleId)
                 .toList();
