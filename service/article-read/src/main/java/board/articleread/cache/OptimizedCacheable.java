@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface OptimizedCacheable {
     String type();
-    long ttlSeconds();
+    long ttlSeconds(); // logical TTL 기준시간
 }

@@ -12,8 +12,9 @@ public class OptimizedCacheLockProvider {
     private final StringRedisTemplate redisTemplate;
 
     private static final String KEY_PREFIX = "optimized-cache-lock::";
-    private static final Duration LOCK_TTL = Duration.ofSeconds(3);
+    private static final Duration LOCK_TTL = Duration.ofSeconds(3); // 3초 뒤 락이 풀리게 설정
 
+    // 저장 성공 시 true
     public boolean lock(String key) {
         return redisTemplate.opsForValue().setIfAbsent(
                 generateLockKey(key),
