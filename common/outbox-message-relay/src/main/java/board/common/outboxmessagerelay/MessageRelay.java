@@ -52,7 +52,7 @@ public class MessageRelay {
 
     @Scheduled(
             fixedDelay = 10, // 이전 작업이 끝난 후, 10초 뒤에 실행
-            initialDelay = 5, // 최소 작업 전에 5초 대기 후 실행
+            initialDelay = 5, // 최초 작업 전에 5초 대기 후 실행
             timeUnit = TimeUnit.SECONDS,
             scheduler = "messageRelayPublishPendingEventExecutor" // messageRelayPublishPendingEventExecutor 빈으로 등록된 스레드풀을 이용하여 아래의 메서드를 비동기 실행
     ) // Kafka 전송에 실패하여 Outbox에 남아 있는 이벤트를 주기적으로 조회
