@@ -31,7 +31,8 @@ public class LikeApiTest {
         unlike(articleId, 3L);
     }
 
-    void like(Long articleId, Long userId, String lockType) {
+    void
+    like(Long articleId, Long userId, String lockType) {
         restClient.post()
                 .uri("/v1/article-likes/articles/{articleId}/users/{userId}/" + lockType, articleId, userId)
                 .retrieve();

@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 
 import org.junit.jupiter.api.Test;
 
+
 class SnowflakeTest {
 	Snowflake snowflake = new Snowflake();
 

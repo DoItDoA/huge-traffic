@@ -4,10 +4,10 @@ spring:
     name: board-article-read-service
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: board-article-read-service
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -15,10 +15,10 @@ spring:
       enable-auto-commit: false
 endpoints:
   board-article-service:
-    url: http://127.0.0.1:9000
+    url: ${ARTICLE_SERVICE_URL}
   board-comment-service:
-    url: http://127.0.0.1:9001
+    url: ${COMMENT_SERVICE_URL}
   board-like-service:
-    url: http://127.0.0.1:9002
+    url: ${LIKE_SERVICE_URL}
   board-view-service:
-    url: http://127.0.0.1:9003
+    url: ${VIEW_SERVICE_URL}

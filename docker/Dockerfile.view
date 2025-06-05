@@ -1,0 +1,10 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# 빌드된 JAR 파일 복사
+COPY service/view/build/libs/view.jar app.jar
+
+# 애플리케이션 실행
+EXPOSE 9003
+ENTRYPOINT ["java", "-jar", "app.jar"] 
